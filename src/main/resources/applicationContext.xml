@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+   <!-- Beans -->
+   <bean id="account1" class="org.katheer.bean.Account">
+      <constructor-arg value="101"/>
+      <constructor-arg value="Abdul Katheer"/>
+      <constructor-arg value="6000"/>
+   </bean>
+
+   <bean id="account2" class="org.katheer.bean.Account">
+      <constructor-arg value="102"/>
+      <constructor-arg value="Manasa"/>
+      <constructor-arg value="8000"/>
+   </bean>
+
+   <bean id="account3" class="org.katheer.bean.Account">
+      <constructor-arg value="103"/>
+      <constructor-arg value="Utpal"/>
+      <constructor-arg value="10000"/>
+   </bean>
+
+   <!-- Target -->
+   <bean id="accountService" class="org.katheer.service.AccountServiceImpl"/>
+
+   <!-- Advice -->
+   <bean id="accountAfterAdvice" class="org.katheer.advice.AccountAfterAdvice"/>
+
+   <!-- NOTE : If AfterAdvice needs to be executed for all methods of a target, then Pointcut and Advisor are not required -->
+
+   <!--
+
+   Pointcut not needed
+   <bean id="pointcut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+      <property name="mappedNames">
+         <list>
+            <value>debit</value>
+            <value>credit</value>
+         </list>
+      </property>
+   </bean>
+
+   Advisor = Advice + Pointcut not needed
+   <bean id="advisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+      <property name="advice" ref="accountAfterAdvice"/>
+      <property name="pointcut" ref="pointcut"/>
+   </bean>
+
+   -->
+
+   <!-- Proxy = Target + Advisor (Advice + Pointcut) -->
+   <bean id="accountProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+      <property name="target" ref="accountService"/>
+      <property name="interceptorNames">
+         <list>
+            <value>accountAfterAdvice</value>
+         </list>
+      </property>
+   </bean>
+
+</beans>
